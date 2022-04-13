@@ -17,7 +17,9 @@ NAME	= philo
 
 INC		= ./include
 DIRS	= ./srcs
-SRCF	= main.c
+SRCF	= main.c \
+			exception.c \
+			util.c
 
 SRCS	= $(addprefix $(DIRS)/, $(SRCF))
 OBJS	= $(SRCS:.c=.o)
