@@ -6,7 +6,7 @@
 /*   By: youngpar <youngseo321@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 20:40:48 by youngpar          #+#    #+#             */
-/*   Updated: 2022/04/13 20:40:49 by youngpar         ###   ########.fr       */
+/*   Updated: 2022/04/24 02:28:18 by youngpar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
+# include <sys/time.h>
 
 /*
  * Philosopher
@@ -30,6 +31,7 @@ typedef struct s_philo		t_philo;
 typedef struct s_routine	t_routine;
 typedef long long			t_ll;
 typedef unsigned long long	t_ull;
+typedef struct timeval		t_tv;
 
 struct s_routine
 {
@@ -48,6 +50,7 @@ struct s_philo
 	int			meal_cnt;
 	t_ll		last_meal;
 	t_routine	*routine;
+	t_thread_mutex	folk;
 	pthread_t 	thread_id;
 };
 

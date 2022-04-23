@@ -34,4 +34,4 @@ int 	arg_toi(char *s)
 	return ((int)ret);
 }
 
-void	timestamp()
+//void	timestamp()
