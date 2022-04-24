@@ -32,6 +32,7 @@ typedef struct s_routine	t_routine;
 typedef long long			t_ll;
 typedef unsigned long long	t_ull;
 typedef struct timeval		t_tv;
+typedef pthread_mutex_t		t_mtx;
 
 struct s_routine
 {
@@ -40,21 +41,22 @@ struct s_routine
 	int 	time_to_eat;
 	int 	time_to_sleep;
 	int 	at_least_eat;
-	int 	died;
-	t_ll	ts_start;
+	t_tv 	died;
+	t_tv	start;
+	t_philo *philos;
+	t_mtx	*ticket;
+	t_mtx	*forks;
+	t_mtx	print_right;
 };
 
 struct s_philo
 {
 	int			no;
 	int			meal_cnt;
-	t_ll		last_meal;
+	t_tv		last_meal;
 	t_routine	*routine;
-	t_thread_mutex	folk;
 	pthread_t 	thread_id;
 };
-
-
 
 /*
  * Exceptions
@@ -67,4 +69,13 @@ void	err_msg(char *msg);
  */
 t_bool	is_space(char c);
 int 	arg_toi(char *s);
+int		get_elapsed_ms(t_tv *std_time, t_tv *cur_time);
+void	bsleep(t_tv *start, t_tv *now, int ms);
+
+
+/*
+ * Philosopher
+ */
+
+
 #endif //PHILO_H

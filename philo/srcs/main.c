@@ -34,13 +34,17 @@ static void	parse(int argc, char **argv, t_routine *routine)
 int	main(int argc, char **argv)
 {
 	t_routine	routine;
-	t_tv		tv;
+	t_bool		flag;
 
 	if (argc != 5 && argc != 6)
 		err_msg("Arguments should be 4-5\n");
 	parse(argc, argv, &routine);
-	gettimeofday(&tv, NULL);
-	printf("%ld %d\n", tv.tv_sec, tv.tv_usec);
-	za
+	gettimeofday(&routine.start, NULL);
+	//bsleep(&routine.start, &now, 1000);
+	// init ticket
+	// init forks
+	// init philosopher
+
+	// join
 	return (0);
 }

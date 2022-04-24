@@ -34,4 +34,27 @@ int 	arg_toi(char *s)
 	return ((int)ret);
 }
 
+int get_elapsed_ms(t_tv *std_time, t_tv *cur_time)
+{
+	int ret;
+
+	ret = (cur_time->tv_sec - std_time->tv_sec) * 1000;
+	ret += (cur_time->tv_usec - std_time->tv_usec) / 1000;
+
+	return (ret);
+}
+
+void bsleep(t_tv *start, t_tv *now, int ms)
+{
+	int elapsed;
+
+	gettimeofday(now, NULL);
+	elapsed = get_elapsed_ms(start, now);
+	//printf("current Elapsed Time is %d\n", elapsed);
+	if (elapsed >= ms)
+		return ;
+	usleep((ms - elapsed) / 2 * 1000 + 100);
+	bsleep(start, now, ms);
+}
+
 //void	timestamp()
