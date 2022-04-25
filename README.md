@@ -27,13 +27,13 @@
 
 	- 각 철학자는 1부터 N 까지의 수 중 자기 번호를 가짐, 1..2...N .. 1로 앉음
 	- 철학자의 status가 변경될 때, 
-	''' bash
+	```bash
 	$> {timestamp}_in_ms X has taken a fork
 	$> {timestamp}_in_ms X is eating
 	$> {timestamp}_in_ms X is sleeping
 	$> {timestamp}_in_ms X is thinking
 	$> {timestamp}_in_ms X is died
-	'''
+	```
 
 	- 출력된 status는 다른 철학자의 status와 뒤섞일 수 없으며, 출력 오차 허용은 10ms 이내
 
