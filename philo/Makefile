@@ -19,7 +19,9 @@ INC		= ./include
 DIRS	= ./srcs
 SRCF	= main.c \
 			exception.c \
-			util.c
+			util.c \
+			init.c \
+			philosopher.c
 
 SRCS	= $(addprefix $(DIRS)/, $(SRCF))
 OBJS	= $(SRCS:.c=.o)

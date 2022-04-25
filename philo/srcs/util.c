@@ -50,11 +50,27 @@ void bsleep(t_tv *start, t_tv *now, int ms)
 
 	gettimeofday(now, NULL);
 	elapsed = get_elapsed_ms(start, now);
-	//printf("current Elapsed Time is %d\n", elapsed);
 	if (elapsed >= ms)
 		return ;
 	usleep((ms - elapsed) / 2 * 1000 + 100);
 	bsleep(start, now, ms);
 }
 
-//void	timestamp()
+t_bool	print_status(char *msg, t_philo *philo)
+{
+	t_tv	now;
+
+	if (philo->routine->exited)
+		return (FALSE);
+	gettimeofday(&now, NULL);
+	pthread_mutex_lock(&philo->routine->print_right);
+	if (philo->routine->exited)
+	{
+		pthread_mutex_unlock(&philo->routine->print_right);
+		return (FALSE);
+	}
+	printf(TIME_STAMP, get_elapsed_ms(&philo->routine->start, &now));
+	printf(msg, philo->no);
+	pthread_mutex_unlock(&philo->routine->print_right);
+	return (TRUE);
+}
