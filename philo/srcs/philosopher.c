@@ -1,45 +1,53 @@
 #include "../include/philo.h"
 
+void	sleeping(t_philo *philo)
+{
+	t_tv	start;
+
+	gettimeofday(&start, NULL);
+	print_status(SLEEPING, philo);
+	release_forks(philo);
+	bsleep(&start, &philo->last_sleep, philo->routine->time_to_sleep);
+	if (get_elapsed_ms(&philo->last_meal, &start) > philo->routine->time_to_die)
+		gettimeofday(&philo->routine->exited, NULL);
+	print_status(THINKING, philo);
+}
+
 void	eating(t_philo *philo)
 {
 	t_routine	*rtn;
+	t_tv		now;
 
 	rtn = philo->routine;
-	pthread_mutex_lock(&rtn->ticket[philo->no / 2]);
-	pthread_mutex_lock(&rtn->forks[philo->no]);
-	pthread_mutex_lock(&rtn->forks[philo->no + 1 % rtn->philo_num]);
+	taken_forks(philo);
 	//	Critical Section(Eating)
-	print_status(TAKEN_FORK, philo);
-	bsleep(&rtn->start, &philo->last_meal, rtn->time_to_eat);
+	philo->meal_cnt++;
+	gettimeofday(&philo->last_meal, NULL);
 	print_status(EATING, philo);
+	bsleep(&philo->last_meal, &now, rtn->time_to_eat);
 	//	End Section
-	pthread_mutex_unlock(&rtn->forks[philo->no + 1 % rtn->philo_num]);
-	pthread_mutex_unlock(&rtn->forks[philo->no]);
-	pthread_mutex_unlock(&rtn->ticket[philo->no / 2]);
+	sleeping(philo);
 }
 
 void	*life(void *philosopher)
 {
-	t_philo	*philo;
-	t_tv	now;
-	int 	time;
+	t_philo		*philo;
+	t_routine	*rtn;
+	t_tv		now;
 
 	philo = (t_philo *)philosopher;
-	philo->last_meal = philo->routine->start;
-	//printf("%ld %d\n", philo->last_meal.tv_sec, philo->last_meal.tv_usec);
-	while (!philo->routine->exited)
+	rtn = philo->routine;
+	philo->last_meal = rtn->start;
+	while (!rtn->exited.tv_sec)
 	{
-		gettimeofday(&now, NULL);
-		time = get_elapsed_ms(&philo->last_meal, &now);
-		if (time >= philo->routine->time_to_die)
+		if (rtn->time_to_die < get_elapsed_ms(&philo->last_meal, &now))
 		{
-			philo->routine->exited = &now;
-			break ;
+			gettimeofday(&rtn->exited, NULL);
+			rtn->died = philo->no;
 		}
-		eating(philo);
-		print_status(SLEEPING, philo);
-		bsleep(&philo->last_meal, &now, philo->routine->time_to_sleep);
-		print_status(THINKING, philo);
+		if (!rtn->exited.tv_sec)
+			eating(philo);
 	}
+	while (rtn->join != philo->no);
 	return (NULL);
 }

@@ -21,39 +21,49 @@ void	err_msg(char *msg)
 
 void	thread_exception_handler(t_routine *routine, int error_idx)
 {
-	int idx;
-
-	idx = 0;
-	gettimeofday(routine->exited, NULL);
-	while (idx < error_idx)
+	while (++routine->join < error_idx)
 	{
-		pthread_join(routine->philos[idx].thread_id, NULL);
+		gettimeofday(&routine->exited, NULL);
+		if (routine->join < error_idx)
+			pthread_join(routine->philos[routine->join].thread_id, NULL);
 	}
 	free(routine->philos);
 }
 
-void	ticket_destroy(t_routine *routine, int size)
+int 	exiter(t_routine *routine)
 {
-	int idx;
+	int		idx;
+	int		meal_cnt;
+	t_philo	*philo;
+	t_tv	now;
 
 	idx = 0;
-	while (idx < size)
+	meal_cnt = 0;
+	while (!routine->exited.tv_sec && idx < routine->philo_num)
 	{
-		pthread_mutex_destroy(&routine->ticket[idx]);
+		philo = &routine->philos[idx];
+		if (!philo)
+			continue ;
+		if (routine->at_least_eat != -1 && philo->meal_cnt >= routine->at_least_eat)
+			meal_cnt++;
+		if (!routine->exited.tv_sec && routine->time_to_die \
+				< get_elapsed_ms(&philo->last_meal, &now))
+		{
+			gettimeofday(&routine->exited, NULL);
+			routine->died = idx;
+		}
 		idx++;
 	}
-	free(routine->ticket);
+	return (meal_cnt);
 }
 
-void	forks_destroy(t_routine *routine, int size)
+void	*dead_checker(t_routine *routine)
 {
-	int idx;
-
-	idx = 0;
-	while (idx < size)
+	while (!routine->exited.tv_sec)
 	{
-		pthread_mutex_destroy(&routine->forks[idx]);
-		idx++;
+		if (exiter(routine) == routine->philo_num)
+			gettimeofday(&routine->exited, NULL);
+		usleep(1000);
 	}
-	free(routine->forks);
+	return (NULL);
 }

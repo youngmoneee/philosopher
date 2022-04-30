@@ -38,9 +38,9 @@ int get_elapsed_ms(t_tv *std_time, t_tv *cur_time)
 {
 	int ret;
 
+	gettimeofday(cur_time, NULL);
 	ret = (cur_time->tv_sec - std_time->tv_sec) * 1000;
 	ret += (cur_time->tv_usec - std_time->tv_usec) / 1000;
-
 	return (ret);
 }
 
@@ -48,11 +48,11 @@ void bsleep(t_tv *start, t_tv *now, int ms)
 {
 	int elapsed;
 
-	gettimeofday(now, NULL);
+
 	elapsed = get_elapsed_ms(start, now);
 	if (elapsed >= ms)
 		return ;
-	usleep((ms - elapsed) / 2 * 1000 + 100);
+	usleep((ms - elapsed) / 2 * 1000);
 	bsleep(start, now, ms);
 }
 
@@ -60,11 +60,10 @@ t_bool	print_status(char *msg, t_philo *philo)
 {
 	t_tv	now;
 
-	if (philo->routine->exited)
+	if (philo->routine->exited.tv_sec)
 		return (FALSE);
-	gettimeofday(&now, NULL);
 	pthread_mutex_lock(&philo->routine->print_right);
-	if (philo->routine->exited)
+	if (philo->routine->exited.tv_sec)
 	{
 		pthread_mutex_unlock(&philo->routine->print_right);
 		return (FALSE);

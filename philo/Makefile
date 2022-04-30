@@ -6,7 +6,7 @@
 #    By: youngpar <youngseo321@gmail.com>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/13 17:01:04 by youngpar          #+#    #+#              #
-#    Updated: 2022/04/13 17:15:39 by youngpar         ###   ########.fr        #
+#    Updated: 2022/04/29 23:03:33 by youngpar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ SRCF	= main.c \
 			exception.c \
 			util.c \
 			init.c \
+			mutex.c \
 			philosopher.c
 
 SRCS	= $(addprefix $(DIRS)/, $(SRCF))

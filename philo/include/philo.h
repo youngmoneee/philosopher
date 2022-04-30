@@ -32,7 +32,7 @@
  * Philosopher Message Interface
  */
 
-# define TIME_STAMP		"%d_in_ms "
+# define TIME_STAMP		"%d "
 # define TAKEN_FORK		"%d has taken a fork\n"
 # define EATING			"%d is eating\n"
 # define THINKING		"%d is thinking\n"
@@ -58,12 +58,15 @@ struct s_routine
 	int 	time_to_eat;
 	int 	time_to_sleep;
 	int 	at_least_eat;
-	t_tv 	*exited;
+	int 	died;
+	int 	join;
+	t_tv 	exited;
 	t_tv	start;
 	t_philo *philos;
 	t_mtx	*ticket;
 	t_mtx	*forks;
 	t_mtx	print_right;
+	pthread_t	checker;
 };
 
 struct s_philo
@@ -71,6 +74,7 @@ struct s_philo
 	int			no;
 	int			meal_cnt;
 	t_tv		last_meal;
+	t_tv		last_sleep;
 	t_routine	*routine;
 	pthread_t 	thread_id;
 };
@@ -81,8 +85,9 @@ struct s_philo
 
 void	err_msg(char *msg);
 void	thread_exception_handler(t_routine *routine, int error_idx);
-void	ticket_destroy(t_routine *routine, int size);
-void	forks_destroy(t_routine *routine, int size);
+void	*dead_checker(t_routine *routine);
+int 	exiter(t_routine *routine);
+
 
 /*
  * Util
@@ -99,16 +104,27 @@ t_bool	print_status(char *msg, t_philo *philo);
  * Init
  */
 
+t_bool	thread_init(t_routine *routine);
 t_bool	philo_init(t_routine *routine);
 t_bool	ticket_init(t_routine *routine);
 t_bool	forks_init(t_routine *routine);
-
+void	initialize(t_routine *routine);
 
 /*
  * Philosopher
  */
 
-void	*life(void *philosopher);
 void	eating(t_philo *philo);
+void	sleeping(t_philo *philo);
+void	*life(void *philosopher);
+
+
+/*
+ * Mutex
+ */
+void	taken_forks(t_philo *philo);
+void	release_forks(t_philo *philo);
+void	ticket_destroy(t_routine *routine, int size);
+void	forks_destroy(t_routine *routine, int size);
 
 #endif //PHILO_H
