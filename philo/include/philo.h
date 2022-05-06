@@ -6,7 +6,7 @@
 /*   By: youngpar <youngseo321@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 20:40:48 by youngpar          #+#    #+#             */
-/*   Updated: 2022/04/24 02:28:18 by youngpar         ###   ########.fr       */
+/*   Updated: 2022/05/06 17:03:45 by youngpar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ struct s_routine
 	t_mtx	*ticket;
 	t_mtx	*forks;
 	t_mtx	print_right;
-	pthread_t	checker;
 };
 
 struct s_philo

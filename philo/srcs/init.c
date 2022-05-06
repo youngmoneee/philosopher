@@ -36,7 +36,8 @@ t_bool	philo_init(t_routine *routine)
 		philo->no = idx;
 		philo->routine = routine;
 		philo->meal_cnt = 0;
-		philo->last = routine->start;
+		philo->last.tv_sec = routine->start.tv_sec;
+		philo->last.tv_usec = routine->start.tv_usec;
 		idx++;
 	}
 	return (TRUE);

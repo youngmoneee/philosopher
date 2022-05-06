@@ -5,7 +5,7 @@ void	sleeping(t_philo *philo)
 	print_status(SLEEPING, philo);
 	release_forks(philo);
 	if (philo->routine->exited == FALSE)
-		bsleep(&philo->last, philo->routine->ttsleep + philo->routine->tteat);
+		bsleep(&philo->last, philo->routine->tteat + philo->routine->ttsleep);
 	if (elapsed(&philo->last) > philo->routine->ttdie)
 	{
 		philo->routine->exited = TRUE;
@@ -34,10 +34,13 @@ void	*life(void *philosopher)
 {
 	t_philo		*philo;
 	t_routine	*rtn;
+	t_tv		now;
 
 	philo = (t_philo *)philosopher;
 	rtn = philo->routine;
-	philo->last = rtn->start;
+	gettimeofday(&now, NULL);
+	if (philo->no & 1)
+		bsleep(&now, rtn->tteat);
 	while (rtn->exited == FALSE)
 	{
 		if (rtn->ttdie < elapsed(&philo->last))
@@ -47,7 +50,6 @@ void	*life(void *philosopher)
 		}
 		if (rtn->exited == FALSE)
 			eating(philo);
-		printf("id : %d\n", philo->no);
 	}
 	while (philo->no != rtn->join);
 	return (NULL);

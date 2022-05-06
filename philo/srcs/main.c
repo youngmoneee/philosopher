@@ -6,7 +6,7 @@
 /*   By: youngpar <youngseo321@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 17:06:55 by youngpar          #+#    #+#             */
-/*   Updated: 2022/05/03 23:32:01 by youngpar         ###   ########.fr       */
+/*   Updated: 2022/05/06 18:07:57 by youngpar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,10 @@ int	main(int argc, char **argv)
 	parse(argc, argv, &routine);
 	gettimeofday(&routine.start, NULL);
 	initialize(&routine);
-	//	join
 	dead_checker(&routine);
 	forks_destroy(&routine, routine.philo_num);
 	ticket_destroy(&routine, (routine.philo_num + 1) / 2);
 	pthread_mutex_destroy(&routine.print_right);
-	system("leaks philo");
+	//system("leaks philo");
 	return (0);
 }

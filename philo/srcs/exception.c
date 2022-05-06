@@ -6,7 +6,7 @@
 /*   By: youngpar <youngseo321@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 20:40:42 by youngpar          #+#    #+#             */
-/*   Updated: 2022/05/04 15:07:31 by youngpar         ###   ########.fr       */
+/*   Updated: 2022/05/06 17:29:25 by youngpar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,7 @@ void	thread_exception_handler(t_routine *routine, int error_idx)
 	if (routine->died != -1)
 		printf(DIED, elapsed(&routine->start), routine->died);
 	while (++(routine->join) < error_idx)
-	{
-		printf("%d is joined\n", routine->join);
 		pthread_join(routine->philos[routine->join].thread_id, NULL);
-	}
 	free(routine->philos);
 }
 
@@ -66,6 +63,5 @@ void	dead_checker(t_routine *routine)
 		}
 		usleep(300);
 	}
-	printf("ddd\n");
 	thread_exception_handler(routine, routine->philo_num);
 }

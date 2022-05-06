@@ -41,7 +41,7 @@ int 	elapsed(t_tv *standard)
 
 	gettimeofday(&now, NULL);
 	ret = (now.tv_sec - standard->tv_sec) * 1000;
-	ret += (now.tv_usec - standard->tv_usec) / 1000;
+	ret += ((now.tv_usec - standard->tv_usec) / 1000);
 	return (ret);
 }
 
