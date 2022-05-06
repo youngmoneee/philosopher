@@ -6,7 +6,7 @@
 /*   By: youngpar <youngseo321@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 20:40:42 by youngpar          #+#    #+#             */
-/*   Updated: 2022/04/13 20:40:43 by youngpar         ###   ########.fr       */
+/*   Updated: 2022/05/04 15:07:31 by youngpar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,12 @@ void	err_msg(char *msg)
 
 void	thread_exception_handler(t_routine *routine, int error_idx)
 {
-	while (++routine->join < error_idx)
+	if (routine->died != -1)
+		printf(DIED, elapsed(&routine->start), routine->died);
+	while (++(routine->join) < error_idx)
 	{
-		gettimeofday(&routine->exited, NULL);
-		if (routine->join < error_idx)
-			pthread_join(routine->philos[routine->join].thread_id, NULL);
+		printf("%d is joined\n", routine->join);
+		pthread_join(routine->philos[routine->join].thread_id, NULL);
 	}
 	free(routine->philos);
 }
@@ -35,21 +36,17 @@ int 	exiter(t_routine *routine)
 	int		idx;
 	int		meal_cnt;
 	t_philo	*philo;
-	t_tv	now;
 
 	idx = 0;
 	meal_cnt = 0;
-	while (!routine->exited.tv_sec && idx < routine->philo_num)
+	while (routine->exited == FALSE && idx < routine->philo_num)
 	{
 		philo = &routine->philos[idx];
-		if (!philo)
-			continue ;
-		if (routine->at_least_eat != -1 && philo->meal_cnt >= routine->at_least_eat)
+		if (routine->must != -1 && philo->meal_cnt >= routine->must)
 			meal_cnt++;
-		if (!routine->exited.tv_sec && routine->time_to_die \
-				< get_elapsed_ms(&philo->last_meal, &now))
+		if (routine->exited == FALSE && routine->ttdie < elapsed(&philo->last))
 		{
-			gettimeofday(&routine->exited, NULL);
+			routine->exited = TRUE;
 			routine->died = idx;
 		}
 		idx++;
@@ -57,13 +54,18 @@ int 	exiter(t_routine *routine)
 	return (meal_cnt);
 }
 
-void	*dead_checker(t_routine *routine)
+void	dead_checker(t_routine *routine)
 {
-	while (!routine->exited.tv_sec)
+	while (routine->exited == FALSE)
 	{
 		if (exiter(routine) == routine->philo_num)
-			gettimeofday(&routine->exited, NULL);
-		usleep(1000);
+		{
+			routine->exited = TRUE;
+			thread_exception_handler(routine, routine->philo_num);
+			return ;
+		}
+		usleep(300);
 	}
-	return (NULL);
+	printf("ddd\n");
+	thread_exception_handler(routine, routine->philo_num);
 }

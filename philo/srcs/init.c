@@ -10,7 +10,6 @@ t_bool	thread_init(t_routine *routine)
 	while (idx < routine->philo_num)
 	{
 		philo = &routine->philos[idx];
-		printf("%d\n", philo->no);
 		err = pthread_create(&philo->thread_id, NULL, life, (void *)philo);
 		if (err)
 		{
@@ -37,7 +36,7 @@ t_bool	philo_init(t_routine *routine)
 		philo->no = idx;
 		philo->routine = routine;
 		philo->meal_cnt = 0;
-		philo->last_meal = routine->start;
+		philo->last = routine->start;
 		idx++;
 	}
 	return (TRUE);
@@ -96,7 +95,7 @@ void	initialize(t_routine *routine)
 	pthread_mutex_init(&routine->print_right, NULL);
 	ticket_init(routine);
 	forks_init(routine);
-	pthread_create(&routine->checker, NULL, (void *)dead_checker, &routine);
+	//pthread_create(&routine->checker, NULL, (void *)dead_checker, &routine);
 	philo_init(routine);
 	thread_init(routine);
 }

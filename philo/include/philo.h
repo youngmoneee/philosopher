@@ -33,11 +33,11 @@
  */
 
 # define TIME_STAMP		"%d "
-# define TAKEN_FORK		"%d has taken a fork\n"
-# define EATING			"%d is eating\n"
-# define THINKING		"%d is thinking\n"
-# define SLEEPING		"%d is sleeping\n"
-# define DIED			"%d is died\n"
+# define TAKEN_FORK		"%d %d has taken a fork\n"
+# define EATING			"%d %d is eating\n"
+# define THINKING		"%d %d is thinking\n"
+# define SLEEPING		"%d %d is sleeping\n"
+# define DIED			"%d %d is died\n"
 
 /*
  * Type define
@@ -54,13 +54,13 @@ typedef pthread_mutex_t		t_mtx;
 struct s_routine
 {
 	int 	philo_num;
-	int 	time_to_die;
-	int 	time_to_eat;
-	int 	time_to_sleep;
-	int 	at_least_eat;
+	int 	ttdie;
+	int 	tteat;
+	int 	ttsleep;
+	int 	must;
 	int 	died;
 	int 	join;
-	t_tv 	exited;
+	t_bool 	exited;
 	t_tv	start;
 	t_philo *philos;
 	t_mtx	*ticket;
@@ -73,8 +73,7 @@ struct s_philo
 {
 	int			no;
 	int			meal_cnt;
-	t_tv		last_meal;
-	t_tv		last_sleep;
+	t_tv		last;
 	t_routine	*routine;
 	pthread_t 	thread_id;
 };
@@ -85,7 +84,7 @@ struct s_philo
 
 void	err_msg(char *msg);
 void	thread_exception_handler(t_routine *routine, int error_idx);
-void	*dead_checker(t_routine *routine);
+void	dead_checker(t_routine *routine);
 int 	exiter(t_routine *routine);
 
 
@@ -95,8 +94,8 @@ int 	exiter(t_routine *routine);
 
 t_bool	is_space(char c);
 int 	arg_toi(char *s);
-int		get_elapsed_ms(t_tv *std_time, t_tv *cur_time);
-void	bsleep(t_tv *start, t_tv *now, int ms);
+int 	elapsed(t_tv *standard);
+void	bsleep(t_tv *start, int ms);
 t_bool	print_status(char *msg, t_philo *philo);
 
 

@@ -2,29 +2,30 @@
 
 void	sleeping(t_philo *philo)
 {
-	t_tv	start;
-
-	gettimeofday(&start, NULL);
 	print_status(SLEEPING, philo);
 	release_forks(philo);
-	bsleep(&start, &philo->last_sleep, philo->routine->time_to_sleep);
-	if (get_elapsed_ms(&philo->last_meal, &start) > philo->routine->time_to_die)
-		gettimeofday(&philo->routine->exited, NULL);
+	if (philo->routine->exited == FALSE)
+		bsleep(&philo->last, philo->routine->ttsleep + philo->routine->tteat);
+	if (elapsed(&philo->last) > philo->routine->ttdie)
+	{
+		philo->routine->exited = TRUE;
+		philo->routine->died = philo->no;
+	}
 	print_status(THINKING, philo);
 }
 
 void	eating(t_philo *philo)
 {
 	t_routine	*rtn;
-	t_tv		now;
 
 	rtn = philo->routine;
 	taken_forks(philo);
 	//	Critical Section(Eating)
 	philo->meal_cnt++;
-	gettimeofday(&philo->last_meal, NULL);
+	gettimeofday(&philo->last, NULL);
 	print_status(EATING, philo);
-	bsleep(&philo->last_meal, &now, rtn->time_to_eat);
+	if (philo->routine->exited == FALSE)
+		bsleep(&philo->last, rtn->tteat);
 	//	End Section
 	sleeping(philo);
 }
@@ -33,21 +34,21 @@ void	*life(void *philosopher)
 {
 	t_philo		*philo;
 	t_routine	*rtn;
-	t_tv		now;
 
 	philo = (t_philo *)philosopher;
 	rtn = philo->routine;
-	philo->last_meal = rtn->start;
-	while (!rtn->exited.tv_sec)
+	philo->last = rtn->start;
+	while (rtn->exited == FALSE)
 	{
-		if (rtn->time_to_die < get_elapsed_ms(&philo->last_meal, &now))
+		if (rtn->ttdie < elapsed(&philo->last))
 		{
-			gettimeofday(&rtn->exited, NULL);
+			rtn->exited = TRUE;
 			rtn->died = philo->no;
 		}
-		if (!rtn->exited.tv_sec)
+		if (rtn->exited == FALSE)
 			eating(philo);
+		printf("id : %d\n", philo->no);
 	}
-	while (rtn->join != philo->no);
+	while (philo->no != rtn->join);
 	return (NULL);
 }
