@@ -53,7 +53,7 @@ typedef pthread_mutex_t		t_mtx;
 
 struct s_routine
 {
-	int 	philo_num;
+	int 	num;
 	int 	ttdie;
 	int 	tteat;
 	int 	ttsleep;

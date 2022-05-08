@@ -7,7 +7,7 @@ t_bool	thread_init(t_routine *routine)
 	t_bool	err;
 
 	idx = 0;
-	while (idx < routine->philo_num)
+	while (idx < routine->num)
 	{
 		philo = &routine->philos[idx];
 		err = pthread_create(&philo->thread_id, NULL, life, (void *)philo);
@@ -27,10 +27,10 @@ t_bool	philo_init(t_routine *routine)
 	t_philo	*philo;
 
 	idx = 0;
-	routine->philos = (t_philo *)malloc(sizeof(t_philo) * routine->philo_num);
+	routine->philos = (t_philo *)malloc(sizeof(t_philo) * routine->num);
 	if (!(routine->philos))
 		return (FALSE);
-	while (idx < routine->philo_num)
+	while (idx < routine->num)
 	{
 		philo = &routine->philos[idx];
 		philo->no = idx;
@@ -50,7 +50,7 @@ t_bool	ticket_init(t_routine *routine)
 	t_bool	flag;
 
 	idx = 0;
-	size = (routine->philo_num + 1) / 2;
+	size = (routine->num + 1) / 2;
 	routine->ticket = (t_mtx *)malloc(sizeof(t_mtx) * size);
 	if (!routine->ticket)
 		return (FALSE);
@@ -74,7 +74,7 @@ t_bool	forks_init(t_routine *routine)
 	t_bool	flag;
 
 	idx = 0;
-	size = routine->philo_num;
+	size = routine->num;
 	routine->forks = (t_mtx *)malloc(sizeof(t_mtx) * size);
 	if (!routine->forks)
 		return (FALSE);

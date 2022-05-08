@@ -52,7 +52,7 @@ void bsleep(t_tv *start, int ms)
 	time = elapsed(start);
 	if (time >= ms)
 		return ;
-	usleep((ms - time) / 2 * 1000 + 100);
+	usleep((ms - time) * 1000 / 2 + 100);
 	bsleep(start, ms);
 }
 
@@ -66,7 +66,7 @@ t_bool	print_status(char *msg, t_philo *philo)
 		pthread_mutex_unlock(&philo->routine->print_right);
 		return (FALSE);
 	}
-	printf(msg, elapsed(&philo->routine->start), philo->no);
+	printf(msg, elapsed(&philo->routine->start), philo->no + 1);
 	pthread_mutex_unlock(&philo->routine->print_right);
 	return (TRUE);
 }

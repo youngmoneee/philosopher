@@ -6,7 +6,7 @@
 /*   By: youngpar <youngseo321@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 17:06:55 by youngpar          #+#    #+#             */
-/*   Updated: 2022/05/06 18:07:57 by youngpar         ###   ########.fr       */
+/*   Updated: 2022/05/08 00:07:05 by youngpar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	parse(int argc, char **argv, t_routine *routine)
 {
-	routine->philo_num = arg_toi(argv[1]);
+	routine->num = arg_toi(argv[1]);
 	routine->ttdie = arg_toi(argv[2]);
 	routine->tteat = arg_toi(argv[3]);
 	routine->ttsleep = arg_toi(argv[4]);
@@ -29,7 +29,7 @@ static void	parse(int argc, char **argv, t_routine *routine)
 	}
 	else
 		routine->must = -1;
-	if (routine->philo_num < 1 || routine->ttsleep < 0
+	if (routine->num < 1 || routine->ttsleep < 0
 		|| routine->tteat < 0 || routine->ttdie < 0)
 		err_msg("Args Error\n");
 }
@@ -44,8 +44,8 @@ int	main(int argc, char **argv)
 	gettimeofday(&routine.start, NULL);
 	initialize(&routine);
 	dead_checker(&routine);
-	forks_destroy(&routine, routine.philo_num);
-	ticket_destroy(&routine, (routine.philo_num + 1) / 2);
+	forks_destroy(&routine, routine.num);
+	ticket_destroy(&routine, (routine.num + 1) / 2);
 	pthread_mutex_destroy(&routine.print_right);
 	//system("leaks philo");
 	return (0);
