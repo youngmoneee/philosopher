@@ -6,7 +6,7 @@
 /*   By: youngpar <youngseo321@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 17:06:55 by youngpar          #+#    #+#             */
-/*   Updated: 2022/05/08 00:07:05 by youngpar         ###   ########.fr       */
+/*   Updated: 2022/05/18 00:28:27 by youngpar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int	main(int argc, char **argv)
 	initialize(&routine);
 	dead_checker(&routine);
 	forks_destroy(&routine, routine.num);
-	ticket_destroy(&routine, (routine.num + 1) / 2);
 	pthread_mutex_destroy(&routine.print_right);
 	//system("leaks philo");
 	return (0);

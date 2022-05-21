@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   util.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: youngpar <youngseo321@gmail.com>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/18 00:00:07 by youngpar          #+#    #+#             */
+/*   Updated: 2022/05/18 00:01:28 by youngpar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philo.h"
 
 t_bool	is_space(char c)
@@ -12,9 +24,9 @@ t_bool	is_space(char c)
 	return (FALSE);
 }
 
-int 	arg_toi(char *s)
+int	arg_toi(char *s)
 {
-	t_ll 	ret;
+	t_ll	ret;
 
 	ret = 0;
 	while (is_space(*s) && *s)
@@ -34,9 +46,9 @@ int 	arg_toi(char *s)
 	return ((int)ret);
 }
 
-int 	elapsed(t_tv *standard)
+int	elapsed(t_tv *standard)
 {
-	int 	ret;
+	int		ret;
 	t_tv	now;
 
 	gettimeofday(&now, NULL);
@@ -45,7 +57,7 @@ int 	elapsed(t_tv *standard)
 	return (ret);
 }
 
-void bsleep(t_tv *start, int ms)
+void	bsleep(t_tv *start, int ms)
 {
 	int		time;
 
@@ -70,5 +82,3 @@ t_bool	print_status(char *msg, t_philo *philo)
 	pthread_mutex_unlock(&philo->routine->print_right);
 	return (TRUE);
 }
-
-

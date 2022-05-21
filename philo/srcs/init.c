@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: youngpar <youngseo321@gmail.com>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/18 00:01:51 by youngpar          #+#    #+#             */
+/*   Updated: 2022/05/18 00:13:12 by youngpar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philo.h"
 
 t_bool	thread_init(t_routine *routine)
@@ -23,7 +35,7 @@ t_bool	thread_init(t_routine *routine)
 
 t_bool	philo_init(t_routine *routine)
 {
-	int idx;
+	int		idx;
 	t_philo	*philo;
 
 	idx = 0;
@@ -43,33 +55,9 @@ t_bool	philo_init(t_routine *routine)
 	return (TRUE);
 }
 
-t_bool	ticket_init(t_routine *routine)
-{
-	int 	idx;
-	int		size;
-	t_bool	flag;
-
-	idx = 0;
-	size = (routine->num + 1) / 2;
-	routine->ticket = (t_mtx *)malloc(sizeof(t_mtx) * size);
-	if (!routine->ticket)
-		return (FALSE);
-	while (idx < size)
-	{
-		flag = pthread_mutex_init(&routine->ticket[idx], NULL);
-		if (flag)
-		{
-			ticket_destroy(routine, idx);
-			return (FALSE);
-		}
-		idx++;
-	}
-	return (TRUE);
-}
-
 t_bool	forks_init(t_routine *routine)
 {
-	int 	idx;
+	int		idx;
 	int		size;
 	t_bool	flag;
 
@@ -94,9 +82,7 @@ t_bool	forks_init(t_routine *routine)
 void	initialize(t_routine *routine)
 {
 	pthread_mutex_init(&routine->print_right, NULL);
-	ticket_init(routine);
 	forks_init(routine);
-	//pthread_create(&routine->checker, NULL, (void *)dead_checker, &routine);
 	philo_init(routine);
 	thread_init(routine);
 }

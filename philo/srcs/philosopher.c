@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philosopher.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: youngpar <youngseo321@gmail.com>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/18 00:07:13 by youngpar          #+#    #+#             */
+/*   Updated: 2022/05/18 00:08:36 by youngpar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philo.h"
 
 void	sleeping(t_philo *philo)
@@ -20,13 +32,11 @@ void	eating(t_philo *philo)
 
 	rtn = philo->routine;
 	taken_forks(philo);
-	//	Critical Section(Eating)
 	philo->meal_cnt++;
 	gettimeofday(&philo->last, NULL);
 	print_status(EATING, philo);
 	if (philo->routine->exited == FALSE)
 		bsleep(&philo->last, rtn->tteat);
-	//	End Section
 	sleeping(philo);
 }
 
@@ -51,6 +61,8 @@ void	*life(void *philosopher)
 		if (rtn->exited == FALSE)
 			eating(philo);
 	}
-	while (philo->no != rtn->join);
+	while (TRUE)
+		if (philo->no == rtn->join)
+			break ;
 	return (NULL);
 }

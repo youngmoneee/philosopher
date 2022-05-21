@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mutex.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: youngpar <youngseo321@gmail.com>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/18 00:01:57 by youngpar          #+#    #+#             */
+/*   Updated: 2022/05/18 00:12:08 by youngpar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philo.h"
 
 void	taken_forks(t_philo *philo)
@@ -7,14 +19,14 @@ void	taken_forks(t_philo *philo)
 	rtn = philo->routine;
 	if (rtn->exited)
 		return ;
-	pthread_mutex_lock(&rtn->ticket[philo->no / 2]);
 	pthread_mutex_lock(&rtn->forks[philo->no]);
 	print_status(TAKEN_FORK, philo);
 	if (&rtn->forks[(philo->no + 1) % rtn->num] == &rtn->forks[philo->no])
 	{
 		pthread_mutex_unlock(&rtn->forks[philo->no]);
-		pthread_mutex_unlock(&rtn->ticket[philo->no / 2]);
-		while (!rtn->exited);
+		while (TRUE)
+			if (rtn->exited)
+				break ;
 		return ;
 	}
 	pthread_mutex_lock(&rtn->forks[(philo->no + 1) % rtn->num]);
@@ -28,25 +40,11 @@ void	release_forks(t_philo *philo)
 	rtn = philo->routine;
 	pthread_mutex_unlock(&rtn->forks[philo->no]);
 	pthread_mutex_unlock(&rtn->forks[(philo->no + 1) % rtn->num]);
-	pthread_mutex_unlock(&rtn->ticket[philo->no / 2]);
-}
-
-void	ticket_destroy(t_routine *routine, int size)
-{
-	int idx;
-
-	idx = 0;
-	while (idx < size)
-	{
-		pthread_mutex_destroy(&routine->ticket[idx]);
-		idx++;
-	}
-	free(routine->ticket);
 }
 
 void	forks_destroy(t_routine *routine, int size)
 {
-	int idx;
+	int	idx;
 
 	idx = 0;
 	while (idx < size)

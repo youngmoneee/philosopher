@@ -6,7 +6,7 @@
 /*   By: youngpar <youngseo321@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 20:40:42 by youngpar          #+#    #+#             */
-/*   Updated: 2022/05/08 00:11:14 by youngpar         ###   ########.fr       */
+/*   Updated: 2022/05/18 00:01:44 by youngpar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	thread_exception_handler(t_routine *routine, int error_idx)
 	free(routine->philos);
 }
 
-int 	exiter(t_routine *routine)
+int	exiter(t_routine *routine)
 {
 	int		idx;
 	int		meal_cnt;
